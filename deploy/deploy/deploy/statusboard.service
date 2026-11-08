@@ -1,0 +1,19 @@
+[Unit]
+Description=StatusBoard API
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+User=statusboard
+Group=statusboard
+WorkingDirectory=/opt/statusboard/src
+EnvironmentFile=/etc/statusboard.env
+ExecStart=/opt/statusboard/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
