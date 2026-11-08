@@ -73,10 +73,3 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     db.delete(task)
     db.commit()
     return Response(status_code=204)
-@app.get("/ready")
-def ready(db: Session = Depends(get_db)):
-    try:
-        db.execute(text("SELECT 1"))
-    except SQLAlchemyError:  # <-- Assurez-vous que c'est bien marqué ici
-        raise HTTPException(status_code=503, detail="database unavailable")
-    return {"status": "ready"}
