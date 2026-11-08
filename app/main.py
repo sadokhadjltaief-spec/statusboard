@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException, Response
 from sqlalchemy import select, text
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -27,7 +28,7 @@ def health():
 def ready(db: Session = Depends(get_db)):
     try:
         db.execute(text("SELECT 1"))
-    except Exception:
+    except SQLAlchemyError:
         raise HTTPException(status_code=503, detail="database unavailable")
     return {"status": "ready"}
 
